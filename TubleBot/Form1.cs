@@ -31,7 +31,6 @@ namespace TubleBot
                     if (n != null)
                     {
                         n.avgScore = double.Parse(splitLine[1]);
-                        n.numScoresFactoredIntoAvg = int.Parse(splitLine[2]);
                     }
                 }
 
@@ -54,6 +53,8 @@ namespace TubleBot
                         runTuble(origin, goal);
                     }
 
+                    origin.avgScore /= origin.numScoresFactoredIntoAvg;
+
                     StringBuilder sb = new StringBuilder();
 
                     foreach (Node n in nodes)
@@ -62,8 +63,6 @@ namespace TubleBot
                         sb.Append(n.name);
                         sb.Append(",\t");
                         sb.Append(n.avgScore);
-                        sb.Append(",\t");
-                        sb.Append(n.numScoresFactoredIntoAvg);
                         sb.Append("\n");
                     }
 
@@ -144,7 +143,7 @@ namespace TubleBot
             //update the scores of the node we started at to get this result
 
             origin.numScoresFactoredIntoAvg++;
-            origin.avgScore += ((double)round - origin.avgScore) / (double)origin.numScoresFactoredIntoAvg;
+            origin.avgScore += (double)round;
         }
 
 
@@ -163,7 +162,6 @@ namespace TubleBot
             return nodeList;
         }
 
-
         public class DijkstraContext
         {
             public Node node;
@@ -173,7 +171,6 @@ namespace TubleBot
                 node = _node;
             }
         }
-
 
         private double runDijkstra(List<Node> nodes, Node originNode, Node goalNode)
         {
@@ -199,7 +196,6 @@ namespace TubleBot
 
            // MessageBox.Show("Origin: " + nodes[origin].name + "\nGoal: " + nodes[goal].name);
             bool verbose = false;
-
 
             while (currentIndex != dijkstraNodes.Length)
             {
